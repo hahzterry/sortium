@@ -17,7 +17,7 @@ interface WEnv {
   PUBLIC_URL: string;
 }
 
-const FACTORY_KEYS = ["AM_TOP_COUNTRY", "AM_TOP_DEMO", "YT_TOP_COUNTRY", "YT_VIEWS_24H"];
+const FACTORY_KEYS = ["AM_TOP_CLUB_TRACK", "AM_CLUB_NEW_RELEASE", "YT_TOP_VIEW_VELOCITY", "YT_VIEWS_24H"];
 
 /** One engine run at a time: overlapping cron runs would race on the operator nonce. */
 async function withLock(db: D1Database, now: number, fn: () => Promise<void>) {

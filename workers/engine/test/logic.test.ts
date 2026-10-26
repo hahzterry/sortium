@@ -14,7 +14,7 @@ test("send budget leaves room for reads under the free-plan cap of 50 subrequest
 });
 
 test("draft key is stable", () => {
-  expect(draftKey({ templateKey: "AM_TOP_COUNTRY", entity: "tr", windowKey: "2026-10-13" })).toBe("AM_TOP_COUNTRY:tr:2026-10-13");
+  expect(draftKey({ templateKey: "AM_TOP_CLUB_TRACK", entity: "tr", windowKey: "2026-10-13" })).toBe("AM_TOP_CLUB_TRACK:tr:2026-10-13");
 });
 test("proposal due only after resolve time and while open", () => {
   expect(dueForProposal({ status: "open", resolve_time: 100 }, 99)).toBe(false);

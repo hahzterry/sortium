@@ -3,9 +3,9 @@ import { appleIdsByCountry, withArt } from "../src/art";
 
 type M = { templateKey: string; meta: Record<string, unknown> };
 type C = { art?: string };
-const am: M = { templateKey: "AM_TOP_COUNTRY", meta: { cc: "tr", candidates: [{ id: "11", label: "a" }, { id: "22", label: "b" }] } };
-const amUs: M = { templateKey: "AM_TOP_COUNTRY", meta: { cc: "us", candidates: [{ id: "33", label: "c" }] } };
-const yt: M = { templateKey: "YT_TOP_COUNTRY", meta: { candidates: [{ id: "vid1", label: "v" }] } };
+const am: M = { templateKey: "AM_TOP_CLUB_TRACK", meta: { cc: "tr", candidates: [{ id: "11", label: "a" }, { id: "22", label: "b" }] } };
+const amUs: M = { templateKey: "AM_TOP_CLUB_TRACK", meta: { cc: "us", candidates: [{ id: "33", label: "c" }] } };
+const yt: M = { templateKey: "YT_TOP_VIEW_VELOCITY", meta: { candidates: [{ id: "vid1", label: "v" }] } };
 const views: M = { templateKey: "YT_VIEWS_24H", meta: { videoId: "vid9", bounds: [1, 2, 3] } };
 
 test("groups Apple track ids by storefront, since lookups are per country", () => {

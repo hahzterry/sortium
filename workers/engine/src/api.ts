@@ -56,7 +56,7 @@ export async function getMarket(db: D1Database, id: number, youtubeKey?: string)
       };
       const top = f.feed?.results?.[0];
       live = { label: "#1 right now", value: top ? `${top.artistName} – ${top.name}` : "—" };
-    } else if (r.template_key === "YT_TOP_COUNTRY" && youtubeKey) {
+    } else if (r.template_key === "YT_TOP_VIEW_VELOCITY" && youtubeKey) {
       const c = (await cachedJson(
         `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=${m.meta.region}&maxResults=1&key=${youtubeKey}`,
       )) as { items?: { snippet: { title: string; channelTitle: string } }[] };
