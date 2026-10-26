@@ -18,7 +18,7 @@ contract UmaForkTest is Test {
         UmaResolver ur = new UmaResolver(OO, address(pm), DBT, "ASSERT_TRUTH", 7200, 300);
         pm.setResolver(address(ur));
         pm.setOperator(address(this), true);
-        uint64 tpl = pm.registerTemplate("AM_TOP_DEMO", 1, keccak256("c"), keccak256("r"), "uri", true);
+        uint64 tpl = pm.registerTemplate("AM_CLUB_NEW_RELEASE", 1, keccak256("c"), keccak256("r"), "uri", true);
         string[] memory o = new string[](2); o[0] = "A"; o[1] = "Other";
         uint256 id = pm.createMarket(tpl, "q", o, uint64(block.timestamp + 60), uint64(block.timestamp + 120), bytes32(0));
         usd.faucet(); usd.approve(address(pm), type(uint256).max); pm.bet(id, 0, 5e6);

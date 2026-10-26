@@ -82,7 +82,7 @@ export default function App() {
       <Backdrop art={art} />
       <header className={`hdr${scrolled ? " scrolled" : ""}`}>
         <div className="top">
-          <a className="logo" href="#/" onClick={nav("#/")}><span className="mark" aria-hidden />Sortium</a>
+          <a className="logo" href="#/" onClick={nav("#/")}><span className="mark" aria-hidden />AR PREDICT</a>
           <nav className="nav">
             <a href="#/browse" onClick={nav("#/browse")} aria-current={page === "browse" ? "page" : undefined}>{t.nav.browse}</a>
             <a href="#/leaders" onClick={nav("#/leaders")} aria-current={page === "leaders" ? "page" : undefined}>{t.nav.leaders}</a>

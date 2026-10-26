@@ -13,11 +13,11 @@ test("generated code hashes match the resolver sources on disk", () => {
 });
 
 test("demo and live Apple templates share resolver code", () => {
-  expect(codeHash(TEMPLATES.AM_TOP_DEMO)).toBe(codeHash(TEMPLATES.AM_TOP_COUNTRY));
+  expect(codeHash(TEMPLATES.AM_CLUB_NEW_RELEASE)).toBe(codeHash(TEMPLATES.AM_TOP_CLUB_TRACK));
 });
 test("different resolvers hash differently", () => {
-  expect(codeHash(TEMPLATES.AM_TOP_COUNTRY)).not.toBe(codeHash(TEMPLATES.YT_TOP_COUNTRY));
-  expect(codeHash(TEMPLATES.YT_TOP_COUNTRY)).not.toBe(codeHash(TEMPLATES.YT_VIEWS_24H));
+  expect(codeHash(TEMPLATES.AM_TOP_CLUB_TRACK)).not.toBe(codeHash(TEMPLATES.YT_TOP_VIEW_VELOCITY));
+  expect(codeHash(TEMPLATES.YT_TOP_VIEW_VELOCITY)).not.toBe(codeHash(TEMPLATES.YT_VIEWS_24H));
 });
 test("rules hash is a 32-byte hex", () => {
   expect(rulesHash(TEMPLATES.YT_VIEWS_24H)).toMatch(/^0x[0-9a-f]{64}$/);

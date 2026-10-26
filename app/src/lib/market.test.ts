@@ -13,7 +13,7 @@ test("leader is the outcome with most money, first one on an empty pool", () => 
   expect(leaderIndex([0n, 0n])).toBe(0);
 });
 test("cover of a market falls back to the video thumbnail for view markets", () => {
-  expect(coverOf({ meta, templateKey: "AM_TOP_COUNTRY" })).toBe("a.jpg");
+  expect(coverOf({ meta, templateKey: "AM_TOP_CLUB_TRACK" })).toBe("a.jpg");
   expect(coverOf({ meta: { art: "yt.jpg" }, templateKey: "YT_VIEWS_24H" })).toBe("yt.jpg");
 });
 test("outcome labels split into title and artist", () => {
@@ -24,9 +24,9 @@ test("outcome labels split into title and artist", () => {
 
 test("categories split chart, views and fast markets", async () => {
   const { category } = await import("./market");
-  expect(category({ templateKey: "AM_TOP_COUNTRY", demo: false })).toBe("music");
-  expect(category({ templateKey: "AM_TOP_DEMO", demo: true })).toBe("fast");
-  expect(category({ templateKey: "YT_TOP_COUNTRY", demo: false })).toBe("youtube");
+  expect(category({ templateKey: "AM_TOP_CLUB_TRACK", demo: false })).toBe("music");
+  expect(category({ templateKey: "AM_CLUB_NEW_RELEASE", demo: true })).toBe("fast");
+  expect(category({ templateKey: "YT_TOP_VIEW_VELOCITY", demo: false })).toBe("youtube");
   expect(category({ templateKey: "YT_VIEWS_24H", demo: false })).toBe("views");
 });
 

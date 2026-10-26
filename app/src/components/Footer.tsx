@@ -47,7 +47,7 @@ export function Footer() {
     <footer className="site-foot">
       <div className="foot-grid">
         <div className="foot-brand">
-          <a className="logo" href="#/" onClick={go("#/")}><span className="mark" aria-hidden />Sortium</a>
+          <a className="logo" href="#/" onClick={go("#/")}><span className="mark" aria-hidden />AR PREDICT</a>
           <p>{t.foot.tagline}</p>
           <div className="lang" role="group" aria-label={t.lang.label}>
             {(["tr", "en"] as const).map((l) => (
@@ -88,7 +88,7 @@ export function Footer() {
         {"Sortium".split("").map((c, i) => <span key={i}>{c}</span>)}
       </div>
       <div className="foot-bar">
-        <span>© 2026 Sortium</span>
+        <span>© 2026 AR PREDICT</span>
         <span className="legal">{t.foot.legal}</span>
         <span className="live-block tab"><i />{t.foot.block} {block === null ? "…" : block.toLocaleString(locale(lang))}</span>
       </div>

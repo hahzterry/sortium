@@ -47,10 +47,10 @@ Market #11 on the live deployment went through every step, and `bun run verify 1
 
 | Template | Question | Source | Cadence |
 |---|---|---|---|
-| `AM_TOP_COUNTRY` | Which song will top Apple Music in {country}? | Apple Most Played feed | Daily, 10 countries |
-| `YT_TOP_COUNTRY` | Which video will top YouTube trending in {region}? | YouTube Data API v3 | Daily, 8 regions |
+| `AM_TOP_CLUB_TRACK` | Which song will top Apple Music in {country}? | Apple Most Played feed | Daily, 10 countries |
+| `YT_TOP_VIEW_VELOCITY` | Which video will top YouTube trending in {region}? | YouTube Data API v3 | Daily, 8 regions |
 | `YT_VIEWS_24H` | How many views will {creator}'s new video have after 24h? | YouTube Data API v3 | On each upload by 5 tracked creators |
-| `AM_TOP_DEMO` | The Apple Music question on a short clock (labelled demo) | Apple Most Played feed | Every 15 minutes |
+| `AM_CLUB_NEW_RELEASE` | The Apple Music question on a short clock (labelled demo) | Apple Most Played feed | Every 15 minutes |
 
 ## Try it
 

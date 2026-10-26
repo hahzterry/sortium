@@ -14,13 +14,13 @@ test("nextResolve is a 12:00 UTC slot leaving open time before the 12h lock", ()
 
 test("planned keys are computable without fetching and match the draft key format", () => {
   const now = Date.UTC(2026, 9, 12, 4, 0, 0) / 1000;
-  const keys = TEMPLATES.AM_TOP_COUNTRY.plannedKeys!({ now });
+  const keys = TEMPLATES.AM_TOP_CLUB_TRACK.plannedKeys!({ now });
   expect(keys.length).toBe(10);
-  expect(keys[0]).toBe("AM_TOP_COUNTRY:tr:2026-10-13");
-  const demoA = TEMPLATES.AM_TOP_DEMO.plannedKeys!({ now });
-  const demoB = TEMPLATES.AM_TOP_DEMO.plannedKeys!({ now: now + 900 });
+  expect(keys[0]).toBe("AM_TOP_CLUB_TRACK:tr:2026-10-13");
+  const demoA = TEMPLATES.AM_CLUB_NEW_RELEASE.plannedKeys!({ now });
+  const demoB = TEMPLATES.AM_CLUB_NEW_RELEASE.plannedKeys!({ now: now + 900 });
   expect(demoA[0]).not.toBe(demoB[0]); // a fresh demo market every 15 minutes
-  expect(TEMPLATES.YT_TOP_COUNTRY.plannedKeys!({ now })).toEqual([]);
+  expect(TEMPLATES.YT_TOP_VIEW_VELOCITY.plannedKeys!({ now })).toEqual([]);
 });
 
 test("questions read like a person wrote them", async () => {
@@ -32,6 +32,6 @@ test("questions read like a person wrote them", async () => {
 
 test("YouTube templates produce nothing without an API key", async () => {
   const env = { now: 1_800_000_000 };
-  expect(await TEMPLATES.YT_TOP_COUNTRY.drafts(env)).toEqual([]);
+  expect(await TEMPLATES.YT_TOP_VIEW_VELOCITY.drafts(env)).toEqual([]);
   expect(await TEMPLATES.YT_VIEWS_24H.drafts(env)).toEqual([]);
 });

@@ -16,12 +16,12 @@ async function fetchChart(region: string, key: string, n: number): Promise<Chart
 
 
 export const ytTop: Template = {
-  key: "YT_TOP_COUNTRY",
+  key: "YT_TOP_VIEW_VELOCITY",
   version: 1,
   demo: false,
   resolveFile: "resolve/ytTop.ts",
   plannedKeys: (env: Env) =>
-    env.YOUTUBE_API_KEY ? REGIONS.map((r) => `YT_TOP_COUNTRY:${r}:${new Date(nextResolve(env.now) * 1000).toISOString().slice(0, 10)}`) : [],
+    env.YOUTUBE_API_KEY ? REGIONS.map((r) => `YT_TOP_VIEW_VELOCITY:${r}:${new Date(nextResolve(env.now) * 1000).toISOString().slice(0, 10)}`) : [],
   rules:
     "Outcome = the first item of YouTube Data API v3 videos.list chart=mostPopular for the region at the first resolver fetch " +
     "at or after resolve time. A video not in the list wins as 'Other'. Empty or failing chart for 6 hours → void, stakes refunded.",
@@ -40,7 +40,7 @@ export const ytTop: Template = {
       if (chart.items.length < 2) continue;
       const candidates = chart.items.map((v) => ({ id: v.id, label: `${v.snippet.channelTitle} – ${v.snippet.title}`.slice(0, 120) }));
       out.push({
-        templateKey: "YT_TOP_COUNTRY",
+        templateKey: "YT_TOP_VIEW_VELOCITY",
         entity: region,
         windowKey: new Date(resolveTime * 1000).toISOString().slice(0, 10),
         question: chartQuestion("video", "YouTube", region, resolveTime, false),

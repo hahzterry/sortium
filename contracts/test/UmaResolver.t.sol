@@ -51,7 +51,7 @@ contract UmaResolverTest is PoolMarketsBase {
         vm.prank(proposer); ur.propose(id, 1, keccak256("snap"), "uri");
         string memory c = string(oo.lastClaim());
         assertTrue(bytes(c).length > 0);
-        assertTrue(_contains(c, "AM_TOP_COUNTRY"));
+        assertTrue(_contains(c, "AM_TOP_CLUB_TRACK"));
     }
 
     function test_rejectedAssertionReopensForProposal() public {
@@ -94,7 +94,7 @@ contract UmaResolverTest is PoolMarketsBase {
 
     function test_demoTemplateUsesShortLiveness() public {
         vm.prank(owner);
-        uint64 demoTpl = pm.registerTemplate("AM_TOP_DEMO", 1, keccak256("code"), keccak256("rules"), "uri", true);
+        uint64 demoTpl = pm.registerTemplate("AM_CLUB_NEW_RELEASE", 1, keccak256("code"), keccak256("rules"), "uri", true);
         string[] memory o = _outcomes(2);
         vm.prank(operator);
         uint256 id = pm.createMarket(demoTpl, "q", o, uint64(block.timestamp + 60), uint64(block.timestamp + 120), bytes32(0));

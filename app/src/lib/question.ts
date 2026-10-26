@@ -10,7 +10,7 @@ type Q = { templateKey: string; question: string; resolveTime: number; demo: boo
  */
 export function displayQuestion(m: Q, opts: { short?: boolean; lang?: Lang } = {}): string {
   const chart = m.templateKey.startsWith("AM_TOP") ? { item: "song", name: "Apple Music", cc: m.meta.cc }
-    : m.templateKey === "YT_TOP_COUNTRY" ? { item: "video", name: "YouTube", cc: m.meta.region } : null;
+    : m.templateKey === "YT_TOP_VIEW_VELOCITY" ? { item: "video", name: "YouTube", cc: m.meta.region } : null;
   if (chart && typeof chart.cc === "string") {
     if (opts.lang === "tr") {
       const cc = chart.cc.toLowerCase();

@@ -1,1 +1,8 @@
-{ "name": "sortium", "private": true, "workspaces": ["packages/*", "workers/*", "app"] }
+{
+  "name": "sortium",
+  "private": true,
+  "workspaces": ["packages/*", "workers/*", "app"],
+  "devDependencies": {
+    "@types/bun": "^1.4.4"
+  }
+}

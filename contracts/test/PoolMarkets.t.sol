@@ -21,7 +21,7 @@ contract PoolMarketsBase is Test {
         vm.startPrank(owner);
         pm.setOperator(operator, true);
         pm.setResolver(resolver);
-        tpl = pm.registerTemplate("AM_TOP_COUNTRY", 1, keccak256("code"), keccak256("rules"), "ipfs://rules", false);
+        tpl = pm.registerTemplate("AM_TOP_CLUB_TRACK", 1, keccak256("code"), keccak256("rules"), "ipfs://rules", false);
         vm.stopPrank();
         for (uint160 i = 0xA; i <= 0xC; i++) {
             vm.prank(address(i)); usd.faucet();

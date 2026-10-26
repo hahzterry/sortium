@@ -81,7 +81,7 @@ const en = {
     leadersEmpty: "No results yet. The first daily markets settle at 12:00 UTC.",
     activityTitle: "Live picks",
     activityEmpty: "Picks show up here a few seconds after they land onchain.",
-    tokenTitle: "tUSD, the test dollar Sortium runs on",
+    tokenTitle: "tUSD, the test dollar AR PREDICT runs on",
     tokenBody: "Every market on testnet is played in tUSD, our own ERC-20 on Arbitrum Sepolia. Approvals are signatures, not extra transactions (EIP-2612). Anyone can claim 1,000 a day, with a little test ETH for gas. On mainnet USDC takes its place.",
     tokenAdd: "Add tUSD to my wallet",
     tokenContract: "Token contract",
@@ -408,11 +408,11 @@ const tr: Dict = {
     tweet: (q: string) => `${q} Tahminimi Sortium'da yaptım.`,
     live: { "Views now": "Şu anki izlenme", "#1 right now": "Şu an 1 numara" },
     rules: {
-      AM_TOP_COUNTRY:
+      AM_TOP_CLUB_TRACK:
         "Sonuç, sonuç saatinde ya da hemen sonrasındaki ilk okumada Apple'ın o ülke için yayımladığı resmi En Çok Dinlenenler listesinin ilk sırasındaki şarkıdır. O şarkı seçenekler arasında yoksa 'Başka bir şey' kazanır. Liste sonuç saatinden sonra 6 saat boyunca okunamazsa market iptal olur ve bütün bahisler iade edilir.",
-      AM_TOP_DEMO:
+      AM_CLUB_NEW_RELEASE:
         "Sonuç, sonuç saatinde ya da hemen sonrasındaki ilk okumada Apple'ın o ülke için yayımladığı resmi En Çok Dinlenenler listesinin ilk sırasındaki şarkıdır. O şarkı seçenekler arasında yoksa 'Başka bir şey' kazanır. Liste sonuç saatinden sonra 6 saat boyunca okunamazsa market iptal olur ve bütün bahisler iade edilir.",
-      YT_TOP_COUNTRY:
+      YT_TOP_VIEW_VELOCITY:
         "Sonuç, sonuç saatinde ya da hemen sonrasındaki ilk okumada YouTube Data API'nin o bölge için verdiği trendler listesinin ilk videosudur. Listede olmayan bir video zirvedeyse 'Başka bir şey' kazanır. Liste 6 saat boyunca okunamazsa market iptal olur, bahisler iade edilir.",
       YT_VIEWS_24H:
         "Sonuç, video yayımlandıktan 24 saat sonraki ilk okumada YouTube Data API'nin verdiği izlenme sayısıdır. Aralıklar market açılırken sabitlenir. Video kaldırılır, gizlenir ya da bulunamazsa market iptal olur, bahisler iade edilir.",

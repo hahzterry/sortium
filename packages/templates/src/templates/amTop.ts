@@ -95,5 +95,5 @@ function make(key: string, demo: boolean, countries: readonly string[]): Templat
   };
 }
 
-export const amTop = make("AM_TOP_COUNTRY", false, COUNTRIES);
-export const amTopDemo = make("AM_TOP_DEMO", true, ["us"]);
+export const amTop = make("AM_TOP_CLUB_TRACK", false, COUNTRIES);
+export const amTopDemo = make("AM_CLUB_NEW_RELEASE", true, ["us"]);
