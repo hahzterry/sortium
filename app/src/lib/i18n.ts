@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react";
 
 export type Lang = "en" | "tr";
 
-const KEY = "sortium.lang";
+const KEY = "shortshi.lang";
 
 function detect(): Lang {
   try {
@@ -54,8 +54,8 @@ export const TR_COUNTRY: Record<string, [string, string]> = {
 const en = {
   nav: { today: "Home", browse: "Markets", me: "My picks", leaders: "Leaderboard" },
   home: {
-    title: "Predict the next big YouTube milestone.",
-    sub: "Will a Warehouse Jobs video reach 1 million views in 24 hours? Can it gain 250,000 views in six hours? Predict YouTube performance with test dollars. Verified results determine who shares the pool.",
+    title: "Predict the next big YouTube Shorts.",
+    sub: "Will a @WarehouseJobz video reach 1 million views in 24 hours? Can it gain 250,000 views in six hours? Predict YouTube performance with test dollars. Verified results determine who shares the pool.",
     start: "Start with 1,000 test dollars",
     browse: "See all markets",
     stats: { volume: "In pools", bets: "Picks made", players: "Players", open: "Open markets" },
@@ -69,7 +69,7 @@ const en = {
     tickerClaim: (u: string, a: string) => `${u} collected ${a} tUSD`,
     howTitle: "How it works",
     how: [
-      ["Pick", "Choose YES or NO on a Warehouse Jobs video milestone, or predict which tracked creator gains the most views."],
+      ["Pick", "Choose YES or NO on a YouTube Shorts video milestone, or predict which tracked creator gains the most views."],
       ["Put in", "Your test dollars join the market's single pool. The fewer people on your pick, the more it pays."],
       ["YouTube data decides", "Open code checks YouTube Data API statistics and recorded view snapshots, then submits the result to UMA for disputes. Correct picks split the pool."],
     ],
@@ -81,7 +81,7 @@ const en = {
     leadersEmpty: "No results yet. YouTube markets settle at their scheduled resolution times.",
     activityTitle: "Live picks",
     activityEmpty: "Picks show up here a few seconds after they land onchain.",
-    tokenTitle: "tUSD, the test dollar Warehouse Jobs markets use",
+    tokenTitle: "tUSD, the test dollar YouTube Shorts markets use",
     tokenBody: "Every market on testnet is played in tUSD, our own ERC-20 on Arbitrum Sepolia. Approvals are signatures, not extra transactions (EIP-2612). Anyone can claim 1,000 a day, with a little test ETH for gas. On mainnet USDC takes its place.",
     tokenAdd: "Add tUSD to my wallet",
     tokenContract: "Token contract",
@@ -112,7 +112,7 @@ const en = {
   },
   tabs: { recent: "Recent picks", top: "Biggest picks", related: "More like this" },
   foot: {
-    tagline: "Predict Warehouse Jobs YouTube milestones. Markets use public YouTube statistics, recorded snapshots, and UMA.",
+    tagline: "Predict YouTube Shorts viral milestones. Markets use public YouTube statistics, recorded snapshots, and UMA.",
     markets: "Markets",
     product: "Product",
     verify: "Verify",
@@ -121,8 +121,8 @@ const en = {
     token: "tUSD faucet",
     engine: "Engine API",
     source: "Resolver code",
-    hackathon: "Colosseum Crypto World's Fair, Arbitrum track",
-    legal: "A hackathon project on Arbitrum Sepolia. Test dollars only, no real money, not audited, not investment advice.",
+    hackathon: "Built By Wizard of Hahz",
+    legal: "A game on Arbitrum Sepolia. Test dollars only, no real money, not audited, not investment advice.",
     block: "Arbitrum Sepolia, block",
   },
   picker: {
@@ -189,7 +189,7 @@ const en = {
     evidence: "See the raw evidence",
     contract: "Contract on Arbiscan",
     share: "Share on X",
-    tweet: (q: string) => `${q} I made my pick on Sortium.`,
+    tweet: (q: string) => `${q} I made my pick on Shortshi.`,
     live: { "Views now": "Views now", "#1 right now": "Leading creator" } as Record<string, string>,
     rules: {
       YT_VIEWS_24H: "YES if the tracked video reaches at least 1,000,000 views within 24 hours of publication, verified with YouTube Data API statistics. Missing or unverifiable data voids the market.",
@@ -248,15 +248,15 @@ const en = {
     title: "Browse markets",
     category: "Category",
     soonTab: "More markets",
-    soonNote: "Coming after the hackathon",
+    soonNote: "Coming soon",
     soon: [
       ["24-hour views", "Will the next Warehouse Jobs video reach 1,000,000 views within 24 hours?"],
-      ["View velocity", "Will a Warehouse Jobs video gain 250,000 views within six hours?"],
-      ["24-hour likes", "Will a Warehouse Jobs video reach 50,000 likes within 24 hours?"],
+      ["View velocity", "Will a @WarehouseJobz  video gain 250,000 views within six hours?"],
+      ["24-hour likes", "Will a @WarehouseJobz  video reach 50,000 likes within 24 hours?"],
       ["Engagement rate", "Will likes exceed 5% of views at resolution?"],
       ["Creator views", "Which tracked YouTube creator will gain the most views during the market window?"],
     ],
-    emptyYt: "Warehouse Jobs YouTube markets open when eligible videos and measurement windows are available.",
+    emptyYt: "@WarehouseJobz YouTube markets open when eligible videos and measurement windows are available.",
     emptyMusic: "No 24-hour view markets are open right now. Check back after the next tracked upload.",
   },
   me: {
@@ -277,8 +277,8 @@ type Dict = typeof en;
 const tr: Dict = {
   nav: { today: "Home", browse: "Markets", me: "My picks", leaders: "Leaderboard" },
   home: {
-    title: "Predict the next big YouTube milestone.",
-    sub: "Will a Warehouse Jobs video reach 1 million views in 24 hours? Can it gain 250,000 views in six hours? Predict YouTube performance with test dollars. Verified results determine who shares the pool.",
+    title: "Predict the next big YouTube Shorts.",
+    sub: "Will a  @WarehouseJobz video reach 1 million views in 24 hours? Can it gain 250,000 views in six hours? Predict YouTube performance with test dollars. Verified results determine who shares the pool.",
     start: "Start with 1,000 test dollars",
     browse: "See all markets",
     stats: { volume: "In pools", bets: "Picks made", players: "Players", open: "Open markets" },
@@ -292,7 +292,7 @@ const tr: Dict = {
     tickerClaim: (u: string, a: string) => `${u} collected ${a} tUSD`,
     howTitle: "How it works",
     how: [
-      ["Pick", "Choose YES or NO on a Warehouse Jobs video milestone, or predict which tracked creator gains the most views."],
+      ["Pick", "Choose YES or NO on a YouTube Shorts video milestone, or predict which tracked creator gains the most views."],
       ["Put in", "Your test dollars join the market's single pool. The fewer people on your pick, the more it pays."],
       ["YouTube data decides", "Open code checks YouTube Data API statistics and recorded view snapshots, then submits the result to UMA for disputes. Correct picks split the pool."],
     ],
@@ -304,7 +304,7 @@ const tr: Dict = {
     leadersEmpty: "No results yet. YouTube markets settle at their scheduled resolution times.",
     activityTitle: "Live picks",
     activityEmpty: "Picks show up here a few seconds after they land onchain.",
-    tokenTitle: "tUSD, the test dollar Warehouse Jobs markets use",
+    tokenTitle: "tUSD, the test dollar YouTube Shorts markets use",
     tokenBody: "Every market on testnet is played in tUSD, our own ERC-20 on Arbitrum Sepolia. Approvals are signatures, not extra transactions (EIP-2612). Anyone can claim 1,000 a day, with a little test ETH for gas. On mainnet USDC takes its place.",
     tokenAdd: "Add tUSD to my wallet",
     tokenContract: "Token contract",
@@ -319,7 +319,7 @@ const tr: Dict = {
       fast: "Which tracked YouTube creator will gain the most views?",
       soon: "Explore all five YouTube performance markets",
     },
-    search: "Search Warehouse Jobs videos, creators, or milestones",
+    search: "Search @WarehouseJobz videos, creators, or milestones",
     sort: { closing: "Closing soon", pool: "Biggest pool", fresh: "Newest" },
     gridTitle: "Markets",
     noMatch: "Nothing matches. Try another word or category.",
@@ -335,7 +335,7 @@ const tr: Dict = {
   },
   tabs: { recent: "Recent picks", top: "Biggest picks", related: "More like this" },
   foot: {
-    tagline: "Predict Warehouse Jobs YouTube milestones. Markets use public YouTube statistics, recorded snapshots, and UMA.",
+    tagline: "Predict YouTube Shorts milestones. Markets use public YouTube statistics, recorded snapshots, and UMA.",
     markets: "Markets",
     product: "Product",
     verify: "Verify",
@@ -345,7 +345,7 @@ const tr: Dict = {
     engine: "Engine API",
     source: "Resolver code",
     hackathon: "Colosseum Crypto World's Fair, Arbitrum track",
-    legal: "A hackathon project on Arbitrum Sepolia. Test dollars only, no real money, not audited, not investment advice.",
+    legal: "A game on Arbitrum Sepolia. Test dollars only, no real money, not audited, not investment advice.",
     block: "Arbitrum Sepolia, block",
   },
   picker: {
@@ -412,7 +412,7 @@ const tr: Dict = {
     evidence: "See the raw evidence",
     contract: "Contract on Arbiscan",
     share: "Share on X",
-    tweet: (q: string) => `${q} I made my pick on Sortium.`,
+    tweet: (q: string) => `${q} I made my pick on Shortshi.`,
     live: { "Views now": "Views now", "#1 right now": "Leading creator" } as Record<string, string>,
     rules: {
       YT_VIEWS_24H: "YES if the tracked video reaches at least 1,000,000 views within 24 hours of publication, verified with YouTube Data API statistics. Missing or unverifiable data voids the market.",
@@ -473,13 +473,13 @@ const tr: Dict = {
     soonTab: "More markets",
     soonNote: "Coming after the hackathon",
     soon: [
-      ["24-hour views", "Will the next Warehouse Jobs video reach 1,000,000 views within 24 hours?"],
-      ["View velocity", "Will a Warehouse Jobs video gain 250,000 views within six hours?"],
-      ["24-hour likes", "Will a Warehouse Jobs video reach 50,000 likes within 24 hours?"],
+      ["24-hour views", "Will the next @WarehouseJobz video reach 1,000,000 views within 24 hours?"],
+      ["View velocity", "Will a @WarehouseJobz  video gain 250,000 views within six hours?"],
+      ["24-hour likes", "Will a @WarehouseJobz  video reach 50,000 likes within 24 hours?"],
       ["Engagement rate", "Will likes exceed 5% of views at resolution?"],
       ["Creator views", "Which tracked YouTube creator will gain the most views during the market window?"],
     ],
-    emptyYt: "Warehouse Jobs YouTube markets open when eligible videos and measurement windows are available.",
+    emptyYt: "@WarehouseJobz YouTube markets open when eligible videos and measurement windows are available.",
     emptyMusic: "No 24-hour view markets are open right now. Check back after the next tracked upload.",
   },
   me: {

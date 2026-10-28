@@ -5,7 +5,7 @@ import { WalletError, balanceOf, connectInjected, connectInstant, disconnect, ha
 export type Wallet = ReturnType<typeof useWallet>;
 export type Discovered = { id: string; name: string; icon?: string; provider: Eip1193 };
 
-const LAST = "sortium.wallet";
+const LAST = "shortshi.wallet";
 const remember = (v: string | null) => {
   try {
     if (v) localStorage.setItem(LAST, v);

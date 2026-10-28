@@ -1,5 +1,4 @@
-export const ENGINE = (import.meta.env.VITE_ENGINE_URL as string | undefined) ?? "https://cwf-engine.l3ekirerdem.workers.dev";
-
+export const ENGINE = ((import.meta.env.VITE_ENGINE_URL as string | undefined) ?? "https://cwf-engine.summer-water-d053.workers.dev").replace(/\/$/, "");
 export type ApiMarket = {
   id: number;
   templateKey: string;

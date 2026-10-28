@@ -82,7 +82,7 @@ export default function App() {
       <Backdrop art={art} />
       <header className={`hdr${scrolled ? " scrolled" : ""}`}>
         <div className="top">
-          <a className="logo" href="#/" onClick={nav("#/")}><span className="mark" aria-hidden />AR PREDICT</a>
+          <a className="logo" href="#/" onClick={nav("#/")}><span className="mark" aria-hidden />SHORTSHI</a>
           <nav className="nav">
             <a href="#/browse" onClick={nav("#/browse")} aria-current={page === "browse" ? "page" : undefined}>{t.nav.browse}</a>
             <a href="#/leaders" onClick={nav("#/leaders")} aria-current={page === "leaders" ? "page" : undefined}>{t.nav.leaders}</a>
@@ -111,7 +111,7 @@ export default function App() {
         {page === "me" && markets && <MyBets markets={markets} wallet={wallet} />}
       </main>
       {markets && <Footer />}
-      <nav className="tabbar" aria-label="Sortium">
+      <nav className="tabbar" aria-label="Shortshi">
         <a href="#/" onClick={nav("#/")} aria-current={page === "home" ? "page" : undefined}><i className="ti home" aria-hidden />{t.nav.today}</a>
         <a href="#/browse" onClick={nav("#/browse")} aria-current={page === "browse" ? "page" : undefined}><i className="ti grid" aria-hidden />{t.nav.browse}</a>
         <a href="#/leaders" onClick={nav("#/leaders")} aria-current={page === "leaders" ? "page" : undefined}><i className="ti cup" aria-hidden />{t.nav.leaders}</a>

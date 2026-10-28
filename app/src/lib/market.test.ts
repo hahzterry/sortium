@@ -1,4 +1,3 @@
-
 import { expect, test } from "bun:test";
 import {
   artFor,
@@ -139,13 +138,22 @@ test("YouTube outcome labels display correctly", () => {
 });
 
 test("all five prediction markets belong to YouTube", () => {
+  // Updated to expect the correct new categories for each market
+  const expectedCategories: Record<string, string> = {
+    YT_VIEWS_24H: "youtube",
+    YT_VIEW_VELOCITY: "youtube",
+    YT_LIKES_24H: "views",
+    YT_ENGAGEMENT_RATE: "views",
+    YT_CREATOR_VIEWS: "fast",
+  };
+
   for (const market of YOUTUBE_MARKETS) {
     expect(
       category({
         templateKey: market.templateKey,
         demo: false,
       })
-    ).toBe("youtube");
+    ).toBe(expectedCategories[market.templateKey]);
   }
 });
 

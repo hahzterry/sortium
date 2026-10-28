@@ -8,8 +8,8 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "Sortium",
-        short_name: "Sortium",
+        name: "Shortshi",
+        short_name: "shortshi",
         theme_color: "#17131f",
         background_color: "#17131f",
         display: "standalone",
