@@ -1,3 +1,4 @@
+
 import { TEMPLATES } from "@cwf/templates";
 import type { Row } from "./logic";
 import { appleIdsByCountry, lookupApple, withArt } from "./art";
@@ -45,23 +46,35 @@ export async function getMarket(db: D1Database, id: number, youtubeKey?: string)
   const m = toApi(r);
   let live: { label: string; value: string } | undefined;
   try {
-    if (r.template_key === "YT_VIEWS_24H" && youtubeKey) {
-      const v = (await cachedJson(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${m.meta.videoId}&key=${youtubeKey}`)) as {
-        items?: { statistics?: { viewCount?: string } }[];
-      };
-      live = { label: "Views now", value: v.items?.[0]?.statistics?.viewCount ?? "—" };
-    } else if (r.template_key.startsWith("AM_TOP")) {
-      const f = (await cachedJson(`https://rss.marketingtools.apple.com/api/v2/${m.meta.cc}/music/most-played/1/songs.json`)) as {
-        feed?: { results?: { name: string; artistName: string }[] };
-      };
-      const top = f.feed?.results?.[0];
-      live = { label: "#1 right now", value: top ? `${top.artistName} – ${top.name}` : "—" };
-    } else if (r.template_key === "YT_TOP_VIEW_VELOCITY" && youtubeKey) {
-      const c = (await cachedJson(
-        `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=${m.meta.region}&maxResults=1&key=${youtubeKey}`,
-      )) as { items?: { snippet: { title: string; channelTitle: string } }[] };
-      const top = c.items?.[0];
-      live = { label: "#1 right now", value: top ? `${top.snippet.channelTitle} – ${top.snippet.title}` : "—" };
+    if (["YT_VIEWS_24H", "YT_VIEW_VELOCITY", "YT_LIKES_24H", "YT_ENGAGEMENT_RATE"].includes(r.template_key) && youtubeKey) {
+      const videoId = String(m.meta.videoId ?? "");
+      if (videoId) {
+        const v = (await cachedJson(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${encodeURIComponent(videoId)}&key=${encodeURIComponent(youtubeKey)}`)) as {
+          items?: { statistics?: { viewCount?: string; likeCount?: string } }[];
+        };
+        const stats = v.items?.[0]?.statistics;
+        if (stats) {
+          const views = Number(stats.viewCount ?? 0);
+          const likes = Number(stats.likeCount ?? 0);
+          if (r.template_key === "YT_VIEWS_24H") {
+            live = { label: "Views now", value: views.toLocaleString("en-US") };
+          } else if (r.template_key === "YT_VIEW_VELOCITY") {
+            live = { label: "Total views now", value: views.toLocaleString("en-US") };
+          } else if (r.template_key === "YT_LIKES_24H") {
+            live = { label: "Likes now", value: likes.toLocaleString("en-US") };
+          } else if (r.template_key === "YT_ENGAGEMENT_RATE") {
+            live = { label: "Like-to-view rate", value: views > 0 ? `${((likes / views) * 100).toFixed(2)}%` : "N/A" };
+          }
+        }
+      }
+    } else if (r.template_key === "YT_CREATOR_VIEWS" && youtubeKey) {
+      const channelId = String(m.meta.channelId ?? "");
+      if (channelId) {
+        const c = (await cachedJson(
+          `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${encodeURIComponent(channelId)}&key=${encodeURIComponent(youtubeKey)}`,
+        )) as { items?: { statistics?: { viewCount?: string } }[] };
+        live = { label: "Creator total views now", value: c.items?.[0]?.statistics?.viewCount ? Number(c.items[0].statistics.viewCount).toLocaleString("en-US") : "—" };
+      }
     }
   } catch {
     // live data is best-effort; the market page still works without it
