@@ -18,7 +18,13 @@ interface WEnv {
 }
 
 // Your 5 new markets
-const FACTORY_KEYS = ["YT_VIEWS_24H", "YT_VIEW_VELOCITY", "YT_LIKES_24H"];
+const FACTORY_KEYS = [
+  "YT_VIEWS_24H",
+  "YT_VIEW_VELOCITY",
+  "YT_LIKES_24H",
+  "YT_ENGAGEMENT_RATE",
+  "YT_CREATOR_VIEWS",
+];
 
 /** One engine run at a time: overlapping cron runs would race on the operator nonce. */
 async function withLock(db: D1Database, now: number, fn: () => Promise<void>) {

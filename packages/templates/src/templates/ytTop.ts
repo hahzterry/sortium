@@ -1,74 +1,125 @@
-import { resolveYtTop } from "../resolve/ytTop";
+
 import type { Env, MarketDraft, Template } from "../types";
 
-const REGIONS = ["TR", "US", "KR", "BR", "IN", "JP", "DE", "GB"] as const;
-const chartUrl = (region: string, key: string, n: number) =>
-  `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=${region}&maxResults=${n}&key=${key}`;
+const CHANNEL_HANDLE = "warehousejobz";
+const MARKET_KEY = "YT_VIEW_VELOCITY";
+const VIEW_TARGET = 250_000;
+const WINDOW_SECONDS = 6 * 3600;
+const LOCK_SECONDS = 3600;
 
-type Chart = { items: { id: string; snippet: { title: string; channelTitle: string } }[] };
+const channelUrl = (key: string) =>
+  `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle=${CHANNEL_HANDLE}&key=${key}`;
 
-async function fetchChart(region: string, key: string, n: number): Promise<Chart> {
-  const res = await fetch(chartUrl(region, key, n));
-  if (!res.ok) throw new Error(`yt chart ${region} ${res.status}`);
+const chartUrl = (videoId: string, key: string, n: number) =>
+  `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${encodeURIComponent(videoId)}&maxResults=${n}&key=${key}`;
+
+type Chart = { items: { id: string; snippet: { title: string; channelTitle: string; publishedAt: string }; statistics: { viewCount?: string; likeCount?: string } }[] };
+
+async function fetchChart(videoId: string, key: string, n: number): Promise<Chart> {
+  const res = await fetch(chartUrl(videoId, key, n));
+  if (!res.ok) throw new Error(`yt video ${videoId} ${res.status}`);
   return (await res.json()) as Chart;
 }
 
-// --- Local replacements for the deleted amTop.ts functions ---
+// --- Warehouse Jobz YouTube upload discovery ---
 
-function nextResolve(now: number): number {
-  const d = new Date(now * 1000);
-  d.setUTCHours(24, 0, 0, 0); // Resolve at the next midnight UTC
-  return Math.floor(d.getTime() / 1000);
+async function fetchUploads(key: string): Promise<Chart> {
+  const channelRes = await fetch(channelUrl(key));
+  if (!channelRes.ok) throw new Error(`yt channel ${channelRes.status}`);
+  const channel = (await channelRes.json()) as {
+    items?: { contentDetails?: { relatedPlaylists?: { uploads?: string } } }[];
+  };
+  const playlistId = channel.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
+  if (!playlistId) throw new Error(`YouTube channel not found: @${CHANNEL_HANDLE}`);
+
+  const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${encodeURIComponent(playlistId)}&maxResults=50&key=${key}`;
+  const playlistRes = await fetch(playlistUrl);
+  if (!playlistRes.ok) throw new Error(`yt uploads ${playlistRes.status}`);
+  const playlist = (await playlistRes.json()) as {
+    items?: { contentDetails?: { videoId?: string } }[];
+  };
+  const ids = (playlist.items ?? []).map((v) => v.contentDetails?.videoId).filter((id): id is string => !!id);
+  if (!ids.length) return { items: [] };
+
+  return fetchChart(ids.join(","), key, 50);
+}
+
+function nextResolve(published: number): number {
+  return published + WINDOW_SECONDS;
 }
 
 function chartQuestion(item: string, name: string, region: string, resolveTime: number, _demo: boolean): string {
-  const date = new Date(resolveTime * 1000).toISOString().slice(0, 10);
-  return `Which ${item} will top ${name} in ${region.toUpperCase()} on ${date}?`;
+  return `Will ${name} gain at least ${VIEW_TARGET.toLocaleString("en-US")} views within six hours of publication for "${item}"?`;
 }
 
 // -----------------------------------------------------------
 
 export const ytTop: Template = {
-  key: "YT_TOP_VIEW_VELOCITY",
+  key: MARKET_KEY,
   version: 1,
   demo: false,
   resolveFile: "resolve/ytTop.ts",
-  plannedKeys: (env: Env) =>
-    env.YOUTUBE_API_KEY ? REGIONS.map((r) => `YT_TOP_VIEW_VELOCITY:${r}:${new Date(nextResolve(env.now) * 1000).toISOString().slice(0, 10)}`) : [],
+  plannedKeys: (env: Env) => [],
   rules:
-    "Outcome = the first item of YouTube Data API v3 videos.list chart=mostPopular for the region at the first resolver fetch " +
-    "at or after resolve time. A video not in the list wins as 'Other'. Empty or failing chart for 6 hours → void, stakes refunded.",
+    "YES if the Warehouse Jobz video gains at least 250,000 views during the six-hour window beginning at publication. " +
+    "NO if the increase is below 250,000 views. The starting view count and final view count must be verifiable. Missing data results in a void market.",
   async drafts(env: Env): Promise<MarketDraft[]> {
     if (!env.YOUTUBE_API_KEY) return [];
     const out: MarketDraft[] = [];
-    for (const region of REGIONS) {
-      const resolveTime = nextResolve(env.now);
-      let chart: Chart;
-      try {
-        chart = await fetchChart(region, env.YOUTUBE_API_KEY, 7);
-      } catch (e) {
-        console.error(String(e)); // one region failing must not block the others
-        continue;
-      }
-      if (chart.items.length < 2) continue;
-      const candidates = chart.items.map((v) => ({ id: v.id, label: `${v.snippet.channelTitle} – ${v.snippet.title}`.slice(0, 120) }));
+    let chart: Chart;
+    try {
+      chart = await fetchUploads(env.YOUTUBE_API_KEY);
+    } catch (e) {
+      console.error(String(e));
+      return [];
+    }
+    for (const video of chart.items) {
+      const published = Math.floor(new Date(video.snippet.publishedAt).getTime() / 1000);
+      if (!Number.isFinite(published)) continue;
+      const resolveTime = nextResolve(published);
+      const lockTime = published + LOCK_SECONDS;
+      if (env.now >= lockTime - 300 || env.now < published) continue;
       out.push({
-        templateKey: "YT_TOP_VIEW_VELOCITY",
-        entity: region,
-        windowKey: new Date(resolveTime * 1000).toISOString().slice(0, 10),
-        question: chartQuestion("video", "YouTube", region, resolveTime, false),
-        outcomes: [...candidates.map((c) => c.label), "Other"],
-        lockTime: resolveTime - 12 * 3600,
+        templateKey: MARKET_KEY,
+        entity: video.id,
+        windowKey: `${video.id}:${published}`,
+        question: chartQuestion(video.snippet.title, "Warehouse Jobz", CHANNEL_HANDLE, resolveTime, false),
+        outcomes: ["Yes", "No"],
+        lockTime,
         resolveTime,
-        meta: { region, candidates },
+        meta: {
+          videoId: video.id,
+          channelHandle: CHANNEL_HANDLE,
+          channelTitle: video.snippet.channelTitle,
+          title: video.snippet.title,
+          publishedAt: video.snippet.publishedAt,
+          measurementStart: published,
+          measurementEnd: resolveTime,
+          viewTarget: VIEW_TARGET,
+          baselineViews: null,
+        },
       });
     }
     return out;
   },
   async snapshot(meta, env) {
-    const body = await fetchChart(meta.region as string, env.YOUTUBE_API_KEY!, 10);
-    // the API key must never end up inside public evidence
-    return { source: chartUrl(meta.region as string, "REDACTED", 10), fetchedAt: Math.floor(Date.now() / 1000), body };
+    if (!env.YOUTUBE_API_KEY) throw new Error("Missing YOUTUBE_API_KEY");
+    const videoId = String(meta.videoId ?? "");
+    if (!videoId) throw new Error("Missing videoId");
+    const body = await fetchChart(videoId, env.YOUTUBE_API_KEY, 1);
+    return { source: chartUrl(videoId, "REDACTED", 1), fetchedAt: Math.floor(Date.now() / 1000), body };
   },
-  resolve: resolveYtTop,
+  resolve(meta, snap) {
+    const baseline = Number(meta.baselineViews);
+    const videoId = String(meta.videoId ?? "");
+    const body = snap.body as Chart;
+    const current = body.items?.find((v) => v.id === videoId);
+    const finalViews = Number(current?.statistics?.viewCount);
+
+    if (meta.baselineViews === null || meta.baselineViews === undefined) return 255;
+    if (!Number.isFinite(baseline) || !Number.isFinite(finalViews)) return 255;
+    if (!current) return 255;
+
+    return finalViews - baseline >= VIEW_TARGET ? 0 : 1;
+  },
 };

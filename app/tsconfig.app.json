@@ -4,7 +4,7 @@
     "target": "es2023",
     "lib": ["ES2023", "DOM"],
     "module": "esnext",
-    "types": ["vite/client", "vite-plugin-pwa/vanillajs"],
+    "types": ["vite/client", "vite-plugin-pwa/vanillajs", "bun"],
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
 
@@ -23,6 +23,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "exclude": ["src/**/*.test.ts"]
+  "include": ["src"]
 }

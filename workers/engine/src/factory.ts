@@ -16,11 +16,20 @@ export async function runFactory(db: D1Database, chain: Chain, env: Env, key: st
   }
 
   const planned = t.plannedKeys?.(env);
-  if (planned) {
-    if (planned.length === 0) return;
+
+  // Empty plannedKeys means no prefetch optimization is available.
+  // Always call drafts() so dynamic YouTube markets can be discovered.
+  if (planned && planned.length > 0) {
     const marks = planned.map(() => "?").join(",");
-    const { results } = await db.prepare(`SELECT draft_key FROM markets WHERE draft_key IN (${marks})`).bind(...planned).all<{ draft_key: string }>();
-    if (results.length === planned.length) return; // everything already opened, no source fetches needed
+
+    const { results } = await db
+      .prepare(
+        `SELECT draft_key FROM markets WHERE draft_key IN (${marks})`
+      )
+      .bind(...planned)
+      .all<{ draft_key: string }>();
+
+    if (results.length === planned.length) return;
   }
   let drafts: MarketDraft[];
   try {

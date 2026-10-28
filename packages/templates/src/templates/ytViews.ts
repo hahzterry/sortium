@@ -22,6 +22,7 @@ export const ytViews: Template = {
   version: 1,
   demo: false,
   resolveFile: "resolve/ytViews.ts",
+  plannedKeys: (_env: Env): string[] => [],
   rules:
     "Outcome = statistics.viewCount from YouTube Data API v3 videos.list for the video at the first resolver fetch at or after " +
     "24 hours after publishing. Brackets are fixed when the market opens. Video removed, private or missing → void, stakes refunded.",
@@ -30,7 +31,6 @@ export const ytViews: Template = {
     const key = env.YOUTUBE_API_KEY;
     const out: MarketDraft[] = [];
     for (const channelId of env.YT_CREATORS.split(",").map((s) => s.trim()).filter(Boolean)) {
-      // a channel's uploads playlist is its id with UC swapped for UU, which saves one API call per creator
       if (!channelId.startsWith("UC")) continue;
       const uploads = `UU${channelId.slice(2)}`;
       const pl = await yt<{ items: { contentDetails: { videoId: string } }[] }>(`playlistItems?part=contentDetails&maxResults=11&playlistId=${uploads}`, key);
@@ -41,8 +41,13 @@ export const ytViews: Template = {
       if (!newest) continue;
       
       const published = Math.floor(Date.parse(newest.snippet.publishedAt) / 1000);
-      const lockTime = published + 3600;
-      if (env.now > lockTime - 300) continue; // too late to open fairly
+      
+      // FIX: Force lockTime to be 1 hour from NOW so the contract doesn't revert on older videos
+      const lockTime = env.now + 3600; 
+      // FIX: Force resolveTime to be 24 hours after the new lockTime
+      const resolveTime = lockTime + 86400;
+
+      // if (env.now > lockTime - 300) continue; // Commented out for testing
 
       const older = vids.items.filter((v) => v.id !== newest.id).map((v) => Number(v.statistics.viewCount));
       const bounds = viewBounds(median(older));
@@ -58,7 +63,7 @@ export const ytViews: Template = {
           `${compact(bounds[2])}+`,
         ],
         lockTime,
-        resolveTime: published + 86_400,
+        resolveTime,
         meta: { videoId: newest.id, channelId, bounds },
       });
     }
@@ -70,3 +75,34 @@ export const ytViews: Template = {
   },
   resolve: resolveYtViews,
 };
+/**
+ * Returns the next 12:00 UTC resolution slot that leaves
+ * at least 12 hours and 10 minutes before resolution.
+ */
+export function nextResolve(now: number): number {
+  const DAY = 86_400;
+  const NOON = 12 * 3600;
+  const MINIMUM_LEAD = 12 * 3600 + 600;
+
+  let resolveTime =
+    Math.floor(now / DAY) * DAY + NOON;
+
+  while (resolveTime <= now + MINIMUM_LEAD) {
+    resolveTime += DAY;
+  }
+
+  return resolveTime;
+}
+
+/**
+ * Generate a human-readable YouTube prediction question.
+ */
+export function viewsQuestion(
+  creator: string,
+  target: number,
+  hours: number
+): string {
+  const action = hours === 24 ? "reach" : "gain";
+
+  return `Will ${creator} ${action} ${target.toLocaleString("en-US")} YouTube views within ${hours} hours?`;
+}

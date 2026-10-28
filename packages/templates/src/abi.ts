@@ -1,11 +1,11 @@
 // Generated from contracts/out after the Arbitrum Sepolia deployment. Do not edit by hand.
 export const ADDRESSES = {
-  tusd: "0x15cA921E97e8E3c33C1DAf63DBdfD173b4e1C970",
-  markets: "0x950863296D8d229ee7B847E20B7960E8C7f6C41a",
-  resolver: "0x15F8C0C400beDE3d228A88af1360e4e3e899D623",
+  tusd: "0xFc16A7a43ce8045EFa8cC9AD7c298445a0790A10",
+  markets: "0x8eC0D74284F725adadCad85190882A6717578292",
+  resolver: "0x3687722BCea680aC4E62D0a47C8Ad303b36EE85F",
   oo: "0x1037A21a30aEfF90c269b01c3933eB9a5285d9b8",
   dbt: "0x689FF0D2c17ECbB01477420aB18482A8DAd45186",
-  deployBlock: 318422132n,
+  deployBlock: 323798804n,
 } as const;
 
 export const poolMarketsAbi = [

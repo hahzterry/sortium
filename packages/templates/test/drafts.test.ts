@@ -1,6 +1,6 @@
 
 import { expect, test } from "bun:test";
-import { nextResolve } from "../src/templates/ytViews24h";
+import { nextResolve } from "../src/templates/ytViews";
 import { TEMPLATES } from "../src/index";
 
 const DAY = 86_400;
@@ -28,7 +28,7 @@ test("planned keys are computable without fetching and match the draft key forma
 });
 
 test("questions read like a person wrote them", async () => {
-  const { viewsQuestion } = await import("../src/templates/ytViews24h");
+  const { viewsQuestion } = await import("../src/templates/ytViews");
   const noon = Date.UTC(2026, 9, 13, 12, 0, 0) / 1000;
   expect(viewsQuestion("Warehouse Jobz", 1000000, 24)).toBe("Will Warehouse Jobz reach 1,000,000 YouTube views within 24 hours?");
   expect(viewsQuestion("Warehouse Jobz", 250000, 6)).toBe("Will Warehouse Jobz gain 250,000 YouTube views within 6 hours?");
