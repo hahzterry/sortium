@@ -40,7 +40,6 @@ export const ytViews: Template = {
       const newest = vids.items.find((v) => v.id === ids[0]);
       if (!newest) continue;
       
-      const published = Math.floor(Date.parse(newest.snippet.publishedAt) / 1000);
       
       // FIX: Force lockTime to be 1 hour from NOW so the contract doesn't revert on older videos
       const lockTime = env.now + 3600; 

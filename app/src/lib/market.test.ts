@@ -153,7 +153,7 @@ test("all five prediction markets belong to YouTube", () => {
         templateKey: market.templateKey,
         demo: false,
       })
-    ).toBe(expectedCategories[market.templateKey]);
+    ).toBe(expectedCategories[market.templateKey] as ReturnType<typeof category>);
   }
 });
 

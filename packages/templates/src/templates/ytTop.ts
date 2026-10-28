@@ -48,7 +48,7 @@ function nextResolve(published: number): number {
   return published + WINDOW_SECONDS;
 }
 
-function chartQuestion(item: string, name: string, region: string, resolveTime: number, _demo: boolean): string {
+function chartQuestion(item: string, name: string, _region: string, _resolveTime: number, _demo: boolean): string {
   return `Will ${name} gain at least ${VIEW_TARGET.toLocaleString("en-US")} views within six hours of publication for "${item}"?`;
 }
 
@@ -59,7 +59,7 @@ export const ytTop: Template = {
   version: 1,
   demo: false,
   resolveFile: "resolve/ytTop.ts",
-  plannedKeys: (env: Env) => [],
+  plannedKeys: (_env: Env) => [],
   rules:
     "YES if the Warehouse Jobz video gains at least 250,000 views during the six-hour window beginning at publication. " +
     "NO if the increase is below 250,000 views. The starting view count and final view count must be verifiable. Missing data results in a void market.",
