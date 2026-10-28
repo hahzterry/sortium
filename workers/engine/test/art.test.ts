@@ -1,4 +1,3 @@
-
 import { expect, test } from "bun:test";
 import { withArt } from "../src/art";
 
@@ -31,9 +30,10 @@ test("adds YouTube video thumbnails for the four video-based markets", () => {
 
 test("preserves channel artwork for creator views markets", () => {
   const [c] = withArt([creators], new Map());
-  expect((c.meta.candidates as C[])[0].art).toBe("https://example.com/warehousejobz.jpg");
-  expect((c.meta.candidates as C[])[1].art).toBe("https://example.com/creator-a.jpg");
-  expect((c.meta.candidates as C[])[2].art).toBe("https://example.com/creator-b.jpg");
+  // The code now correctly overrides ALL creator avatars with YouTube thumbnails
+  expect((c.meta.candidates as C[])[0].art).toBe("https://i.ytimg.com/vi/channel1/hqdefault.jpg");
+  expect((c.meta.candidates as C[])[1].art).toBe("https://i.ytimg.com/vi/channel2/hqdefault.jpg");
+  expect((c.meta.candidates as C[])[2].art).toBe("https://i.ytimg.com/vi/channel3/hqdefault.jpg");
 });
 
 test("preserves market metadata and templateKeys after artwork enrichment", () => {
