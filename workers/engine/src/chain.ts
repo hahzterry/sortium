@@ -28,7 +28,15 @@ export function makeChain(operatorKey: string) {
       nonce = n;
       maxFeePerGas = gasPrice * 2n;
     }
-    const gas = await pub.estimateGas({ account: account.address, to, data, value });
+
+    let gas = 5000000n; // Hardcoded fallback gas limit
+    try {
+      const estimated = await pub.estimateGas({ account: account.address, to, data, value });
+      gas = (estimated * 13n) / 10n;
+    } catch (e) {
+      console.warn(`Gas estimation failed, using fallback gas (5m). Error: ${String(e).slice(0, 100)}`);
+    }
+
     const raw = await account.signTransaction({
       chainId: arbitrumSepolia.id,
       type: "eip1559",
@@ -36,7 +44,7 @@ export function makeChain(operatorKey: string) {
       data,
       value,
       nonce,
-      gas: (gas * 13n) / 10n,
+      gas,
       maxFeePerGas,
       maxPriorityFeePerGas: 0n,
     });

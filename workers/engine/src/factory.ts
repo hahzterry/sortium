@@ -8,6 +8,13 @@ export type Budget = { sends: number };
 /** Phase 1: open missing markets for one template, spending at most budget.sends transactions. */
 export async function runFactory(db: D1Database, chain: Chain, env: Env, key: string, budget: Budget) {
   const t = TEMPLATES[key];
+
+  // Guard: skip unknown templates instead of crashing the whole engine.
+  if (!t) {
+    console.warn(`[factory] Template "${key}" not found in TEMPLATES. Available:`, Object.keys(TEMPLATES));
+    return;
+  }
+
   const planned = t.plannedKeys?.(env);
   if (planned) {
     if (planned.length === 0) return;

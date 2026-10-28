@@ -1,123 +1,149 @@
+
 import { expect, test } from "bun:test";
 import { displayQuestion } from "./question";
 
 const noon = Date.UTC(2026, 9, 13, 12, 0, 0) / 1000;
 
-test("chart markets display a readable question for club music genres", () => {
+const channel = {
+  name: "Warehouse Jobz",
+  handle: "@warehousejobz",
+  url: "https://youtube.com/@warehousejobz",
+};
+
+const videos = {
+  forklift: "Online Forklift Certification Training",
+  blueYonder: "Blue Yonder WMS Solutions Analyst Training",
+  inventory: "Warehouse Inventory Management Training",
+  inbound: "Warehouse Receiving and Inbound Operations",
+  outbound: "Warehouse Picking, Packing and Shipping",
+};
+
+test("24-hour views market displays Warehouse Jobz forklift training question", () => {
+  const question =
+    `Will Warehouse Jobz's "${videos.forklift}" video reach 1 million views within 24 hours?`;
+
   const market = {
-    templateKey: "AM_TOP_CLUB_TRACK",
-    question:
-      "Which song will be #1 on Apple Music US at 2026-10-13 12:00 UTC?",
+    templateKey: "YT_VIEWS_24H",
+    question,
     resolveTime: noon,
     demo: false,
-    meta: { cc: "us" },
+    meta: {
+      channel: channel.name,
+      channelHandle: channel.handle,
+      channelUrl: channel.url,
+      videoTitle: videos.forklift,
+      threshold: 1_000_000,
+      windowHours: 24,
+    },
   };
 
-  expect(displayQuestion(market)).toBe(
-    "Which Jersey, Bmore, or Philly club track will top Apple Music in the United States on Oct 13 (12:00 UTC)?"
-  );
+  expect(displayQuestion(market)).toBe(question);
 });
 
-test("demo markets remove the demo prefix and include the resolution time", () => {
-  const market = {
-    templateKey: "AM_CLUB_NEW_RELEASE",
-    question: "[demo] x",
-    resolveTime: noon + 300,
-    demo: true,
-    meta: { cc: "us" },
-  };
+test("six-hour view velocity market displays Blue Yonder training question", () => {
+  const question =
+    `Will Warehouse Jobz's "${videos.blueYonder}" video gain 250,000 views within 6 hours?`;
 
-  expect(displayQuestion(market)).toBe(
-    "Which Jersey, Bmore, or Philly club track will top Apple Music in the United States at 12:05 UTC?"
-  );
-});
-
-test("short headlines omit the date when it is displayed elsewhere", () => {
   const market = {
-    templateKey: "AM_TOP_CLUB_TRACK",
-    question: "x",
+    templateKey: "YT_VIEW_VELOCITY",
+    question,
     resolveTime: noon,
     demo: false,
-    meta: { cc: "gb" },
+    meta: {
+      channel: channel.name,
+      channelHandle: channel.handle,
+      videoTitle: videos.blueYonder,
+      threshold: 250_000,
+      windowHours: 6,
+    },
   };
 
-  expect(displayQuestion(market, { short: true })).toBe(
-    "Which Jersey, Bmore, or Philly club track will top Apple Music in the United Kingdom?"
-  );
+  expect(displayQuestion(market)).toBe(question);
 });
 
-test("YouTube chart and other market templates display correctly", () => {
-  expect(
-    displayQuestion({
-      templateKey: "YT_TOP_VIEW_VELOCITY",
-      question: "q",
-      resolveTime: noon,
-      demo: false,
-      meta: { region: "us" },
-    })
-  ).toBe("Which Jersey, Bmore, or Philly club video will top YouTube in the United States on Oct 13 (12:00 UTC)?");
+test("24-hour likes market displays warehouse inventory training question", () => {
+  const question =
+    `Will Warehouse Jobz's "${videos.inventory}" video reach 50,000 likes within 24 hours?`;
+
+  const market = {
+    templateKey: "YT_LIKES_24H",
+    question,
+    resolveTime: noon,
+    demo: false,
+    meta: {
+      channel: channel.name,
+      videoTitle: videos.inventory,
+      threshold: 50_000,
+      windowHours: 24,
+    },
+  };
+
+  expect(displayQuestion(market)).toBe(question);
+});
+
+test("engagement rate market displays inbound operations question", () => {
+  const question =
+    `Will likes on Warehouse Jobz's "${videos.inbound}" video exceed 5% of its views at the resolution snapshot?`;
+
+  const market = {
+    templateKey: "YT_ENGAGEMENT_RATE",
+    question,
+    resolveTime: noon,
+    demo: false,
+    meta: {
+      channel: channel.name,
+      videoTitle: videos.inbound,
+      threshold: 5,
+      metric: "likes_to_views_percentage",
+    },
+  };
+
+  expect(displayQuestion(market)).toBe(question);
+});
+
+test("creator views market compares Warehouse Jobz with tracked creators", () => {
+  const question =
+    "Will Warehouse Jobz generate more new video views than the other tracked warehouse training creators during the next 24 hours?";
+
+  const market = {
+    templateKey: "YT_CREATOR_VIEWS",
+    question,
+    resolveTime: noon,
+    demo: false,
+    meta: {
+      channel: channel.name,
+      channelHandle: channel.handle,
+      windowHours: 24,
+      metric: "views_gained",
+    },
+  };
+
+  expect(displayQuestion(market)).toBe(question);
+});
+
+test("outbound training content supports the views market", () => {
+  const question =
+    `Will Warehouse Jobz's "${videos.outbound}" video reach 1 million views within 24 hours?`;
 
   expect(
     displayQuestion({
       templateKey: "YT_VIEWS_24H",
-      question: "How many views?",
+      question,
       resolveTime: noon,
       demo: false,
-      meta: {},
-    })
-  ).toBe("How many views?");
-});
-
-test("English questions use the correct country names and grammar", () => {
-  const market = (cc: string) => ({
-    templateKey: "AM_TOP_CLUB_TRACK",
-    question: "x",
-    resolveTime: noon,
-    demo: false,
-    meta: { cc },
-  });
-
-  expect(displayQuestion(market("us"), { short: true })).toBe(
-    "Which Jersey, Bmore, or Philly club track will top Apple Music in the United States?"
-  );
-
-  expect(displayQuestion(market("gb"), { short: true })).toBe(
-    "Which Jersey, Bmore, or Philly club track will top Apple Music in the United Kingdom?"
-  );
-
-  expect(displayQuestion(market("de"), { short: true })).toBe(
-    "Which Jersey, Bmore, or Philly club track will top Apple Music in Germany?"
-  );
-
-  expect(
-    displayQuestion(
-      {
-        templateKey: "YT_TOP_VIEW_VELOCITY",
-        question: "q",
-        resolveTime: noon,
-        demo: false,
-        meta: { region: "kr" },
+      meta: {
+        channel: channel.name,
+        videoTitle: videos.outbound,
+        threshold: 1_000_000,
+        windowHours: 24,
       },
-      { short: true }
-    )
-  ).toBe("Which Jersey, Bmore, or Philly club video will top YouTube in South Korea?");
-
-  expect(
-    displayQuestion(
-      {
-        templateKey: "AM_CLUB_NEW_RELEASE",
-        question: "x",
-        resolveTime: noon + 300,
-        demo: true,
-        meta: { cc: "us" },
-      }
-    )
-  ).toBe("Which Jersey, Bmore, or Philly club track will top Apple Music in the United States at 12:05 UTC?");
+    })
+  ).toBe(question);
 });
 
-test("view-count questions are rebuilt from stored English text", () => {
+test("short YouTube headlines remain readable", () => {
   const question =
-    'How many views will "Rumpshaker" by DJ Taj have 24h after publishing?';
+    `Will "${videos.forklift}" reach 1 million views in 24 hours?`;
 
   expect(
     displayQuestion(
@@ -126,8 +152,69 @@ test("view-count questions are rebuilt from stored English text", () => {
         question,
         resolveTime: noon,
         demo: false,
-        meta: {},
-      }
+        meta: {
+          channel: channel.name,
+          videoTitle: videos.forklift,
+        },
+      },
+      { short: true }
     )
-  ).toBe('How many views will "Rumpshaker" by DJ Taj have 24h after publishing?');
+  ).toBe(question);
+});
+
+test("demo YouTube markets remove the demo prefix", () => {
+  const question =
+    `Will Warehouse Jobz's "${videos.forklift}" video reach 1 million views within 24 hours?`;
+
+  expect(
+    displayQuestion({
+      templateKey: "YT_VIEWS_24H",
+      question: `[demo] ${question}`,
+      resolveTime: noon + 300,
+      demo: true,
+      meta: {
+        channel: channel.name,
+        videoTitle: videos.forklift,
+      },
+    })
+  ).toBe(question);
+});
+
+test("all five YouTube market categories display Warehouse Jobz questions", () => {
+  const markets = [
+    {
+      templateKey: "YT_VIEWS_24H",
+      question: `Will "${videos.forklift}" reach 1 million views in 24 hours?`,
+    },
+    {
+      templateKey: "YT_VIEW_VELOCITY",
+      question: `Will "${videos.blueYonder}" gain 250,000 views in 6 hours?`,
+    },
+    {
+      templateKey: "YT_LIKES_24H",
+      question: `Will "${videos.inventory}" reach 50,000 likes in 24 hours?`,
+    },
+    {
+      templateKey: "YT_ENGAGEMENT_RATE",
+      question: `Will "${videos.inbound}" exceed a 5% likes-to-views rate?`,
+    },
+    {
+      templateKey: "YT_CREATOR_VIEWS",
+      question: "Will Warehouse Jobz lead tracked creators in views gained?",
+    },
+  ];
+
+  for (const market of markets) {
+    expect(
+      displayQuestion({
+        ...market,
+        resolveTime: noon,
+        demo: false,
+        meta: {
+          channel: channel.name,
+          channelHandle: channel.handle,
+        },
+      })
+    ).toBe(market.question);
+  }
 });

@@ -1,3 +1,4 @@
+
 import { expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -12,15 +13,27 @@ test("generated code hashes match the resolver sources on disk", () => {
   }
 });
 
-test("demo and live Apple templates share resolver code", () => {
-  expect(codeHash(TEMPLATES.AM_CLUB_NEW_RELEASE)).toBe(codeHash(TEMPLATES.AM_TOP_CLUB_TRACK));
+test("all five YouTube market templates are registered", () => {
+  expect(Object.keys(TEMPLATES).sort()).toEqual([
+    "YT_VIEWS_24H",
+    "YT_VIEW_VELOCITY",
+    "YT_LIKES_24H",
+    "YT_ENGAGEMENT_RATE",
+    "YT_CREATOR_VIEWS",
+  ].sort());
 });
-test("different resolvers hash differently", () => {
-  expect(codeHash(TEMPLATES.AM_TOP_CLUB_TRACK)).not.toBe(codeHash(TEMPLATES.YT_TOP_VIEW_VELOCITY));
-  expect(codeHash(TEMPLATES.YT_TOP_VIEW_VELOCITY)).not.toBe(codeHash(TEMPLATES.YT_VIEWS_24H));
+test("different YouTube resolvers hash differently", () => {
+  expect(codeHash(TEMPLATES.YT_VIEWS_24H)).not.toBe(codeHash(TEMPLATES.YT_VIEW_VELOCITY));
+  expect(codeHash(TEMPLATES.YT_VIEW_VELOCITY)).not.toBe(codeHash(TEMPLATES.YT_LIKES_24H));
+  expect(codeHash(TEMPLATES.YT_LIKES_24H)).not.toBe(codeHash(TEMPLATES.YT_ENGAGEMENT_RATE));
+  expect(codeHash(TEMPLATES.YT_ENGAGEMENT_RATE)).not.toBe(codeHash(TEMPLATES.YT_CREATOR_VIEWS));
 });
 test("rules hash is a 32-byte hex", () => {
   expect(rulesHash(TEMPLATES.YT_VIEWS_24H)).toMatch(/^0x[0-9a-f]{64}$/);
+  expect(rulesHash(TEMPLATES.YT_VIEW_VELOCITY)).toMatch(/^0x[0-9a-f]{64}$/);
+  expect(rulesHash(TEMPLATES.YT_LIKES_24H)).toMatch(/^0x[0-9a-f]{64}$/);
+  expect(rulesHash(TEMPLATES.YT_ENGAGEMENT_RATE)).toMatch(/^0x[0-9a-f]{64}$/);
+  expect(rulesHash(TEMPLATES.YT_CREATOR_VIEWS)).toMatch(/^0x[0-9a-f]{64}$/);
 });
 test("every template has rules and a resolve file", () => {
   for (const t of Object.values(TEMPLATES)) {

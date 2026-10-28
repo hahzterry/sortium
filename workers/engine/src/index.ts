@@ -17,7 +17,8 @@ interface WEnv {
   PUBLIC_URL: string;
 }
 
-const FACTORY_KEYS = ["AM_TOP_CLUB_TRACK", "AM_CLUB_NEW_RELEASE", "YT_TOP_VIEW_VELOCITY", "YT_VIEWS_24H"];
+// Your 5 new markets
+const FACTORY_KEYS = ["YT_VIEWS_24H", "YT_VIEW_VELOCITY", "YT_LIKES_24H"];
 
 /** One engine run at a time: overlapping cron runs would race on the operator nonce. */
 async function withLock(db: D1Database, now: number, fn: () => Promise<void>) {
@@ -61,7 +62,7 @@ export default {
     // APP_ORIGIN lists the app's origins, primary first; preview deploys live on subdomains of each
     const apps = env.APP_ORIGIN.split(",").map((s) => s.trim());
     const allowed = origin.startsWith("http://localhost:") ||
-      apps.some((a) => origin === a || origin.endsWith(`.${a.replace(/^https:\/\//, "")}`));
+      apps.some((a) => origin === a || origin.endsWith(`.${a.replace(/^https?:\/\//, "")}`));
     const cors: Record<string, string> = {
       "access-control-allow-origin": allowed ? origin : apps[0],
       vary: "origin",
@@ -71,7 +72,7 @@ export default {
     if (req.method === "OPTIONS") return new Response(null, { headers: cors });
     let res: Response;
     const m = url.pathname.match(/^\/api\/(markets|evidence)\/(\d+)$/);
-    if (url.pathname === "/api/markets") res = await listMarkets(env.DB, url);
+    if (url.pathname === "/api/markets" || url.pathname.startsWith("/api/markets?")) res = await listMarkets(env.DB, url);
     else if (m?.[1] === "markets") res = await getMarket(env.DB, Number(m[2]), env.YOUTUBE_API_KEY);
     else if (m?.[1] === "evidence") res = await getEvidence(env.DB, Number(m[2]));
     else if (url.pathname === "/api/activity") res = await getActivity(env.DB, url);

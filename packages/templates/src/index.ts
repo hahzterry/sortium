@@ -1,15 +1,18 @@
-import { amTop, amTopDemo } from "./templates/amTop";
+// packages/templates/src/index.ts
+
+// 1. Import your new files
 import { ytTop } from "./templates/ytTop";
 import { ytViews } from "./templates/ytViews";
+import { ytLikes } from "./templates/ytLikes";
+
 import type { Template } from "./types";
 
 export * from "./types";
 export * from "./abi";
-export { chartQuestion, countryName } from "./templates/amTop";
 
+// 2. Add them to the TEMPLATES object
 export const TEMPLATES: Record<string, Template> = {
-  [amTop.key]: amTop,
-  [amTopDemo.key]: amTopDemo,
   [ytTop.key]: ytTop,
   [ytViews.key]: ytViews,
+  [ytLikes.key]: ytLikes,
 };

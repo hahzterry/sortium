@@ -1,3 +1,4 @@
+
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 import {Test} from "forge-std/Test.sol";
@@ -21,7 +22,7 @@ contract PoolMarketsBase is Test {
         vm.startPrank(owner);
         pm.setOperator(operator, true);
         pm.setResolver(resolver);
-        tpl = pm.registerTemplate("AM_TOP_CLUB_TRACK", 1, keccak256("code"), keccak256("rules"), "ipfs://rules", false);
+        tpl = pm.registerTemplate("YT_VIEWS_24H", 1, keccak256("code"), keccak256("rules"), "ipfs://rules", false);
         vm.stopPrank();
         for (uint160 i = 0xA; i <= 0xC; i++) {
             vm.prank(address(i)); usd.faucet();
@@ -36,7 +37,7 @@ contract PoolMarketsBase is Test {
 
     function _market(uint256 n) internal returns (uint256 id) {
         vm.prank(operator);
-        id = pm.createMarket(tpl, "Who is #1?", _outcomes(n), uint64(block.timestamp + 1 hours), uint64(block.timestamp + 2 hours), bytes32(0));
+        id = pm.createMarket(tpl, "Will this YouTube video reach 1,000,000 views within 24 hours?", _outcomes(n), uint64(block.timestamp + 1 hours), uint64(block.timestamp + 2 hours), bytes32(0));
     }
 }
 

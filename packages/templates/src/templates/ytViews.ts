@@ -39,9 +39,11 @@ export const ytViews: Template = {
       const vids = await yt<Videos>(`videos?part=snippet,statistics&id=${ids.join(",")}`, key);
       const newest = vids.items.find((v) => v.id === ids[0]);
       if (!newest) continue;
+      
       const published = Math.floor(Date.parse(newest.snippet.publishedAt) / 1000);
       const lockTime = published + 3600;
       if (env.now > lockTime - 300) continue; // too late to open fairly
+
       const older = vids.items.filter((v) => v.id !== newest.id).map((v) => Number(v.statistics.viewCount));
       const bounds = viewBounds(median(older));
       out.push({

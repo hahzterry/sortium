@@ -1,20 +1,28 @@
+
 import { expect, test } from "bun:test";
 import { draftKey, dueForProposal, dueForSettle, factoryTemplateFor, MAX_SENDS_PER_TICK, statusFromState } from "../src/logic";
 
-test("factory rotates one template per minute so a tick stays under the subrequest cap", () => {
-  const keys = ["A", "B", "C", "D"];
-  expect(factoryTemplateFor(0, keys)).toBe("A");
-  expect(factoryTemplateFor(60, keys)).toBe("B");
-  expect(factoryTemplateFor(4 * 60, keys)).toBe("A");
-  expect(factoryTemplateFor(5 * 60 + 59, keys)).toBe("B");
+test("factory rotates one YouTube market template per minute so a tick stays under the subrequest cap", () => {
+  const keys = ["YT_VIEWS_24H", "YT_VIEW_VELOCITY", "YT_LIKES_24H", "YT_ENGAGEMENT_RATE", "YT_CREATOR_VIEWS"];
+  expect(factoryTemplateFor(0, keys)).toBe("YT_VIEWS_24H");
+  expect(factoryTemplateFor(60, keys)).toBe("YT_VIEW_VELOCITY");
+  expect(factoryTemplateFor(120, keys)).toBe("YT_LIKES_24H");
+  expect(factoryTemplateFor(180, keys)).toBe("YT_ENGAGEMENT_RATE");
+  expect(factoryTemplateFor(240, keys)).toBe("YT_CREATOR_VIEWS");
+  expect(factoryTemplateFor(5 * 60, keys)).toBe("YT_VIEWS_24H");
+  expect(factoryTemplateFor(6 * 60 + 59, keys)).toBe("YT_VIEW_VELOCITY");
 });
 test("send budget leaves room for reads under the free-plan cap of 50 subrequests", () => {
-  // each send costs estimateGas + sendRawTransaction, each draft may cost one source fetch
+  // each send costs estimateGas + sendRawTransaction, each draft may cost one YouTube Data API fetch
   expect(MAX_SENDS_PER_TICK * 3 + 5).toBeLessThanOrEqual(45);
 });
 
 test("draft key is stable", () => {
-  expect(draftKey({ templateKey: "AM_TOP_CLUB_TRACK", entity: "tr", windowKey: "2026-10-13" })).toBe("AM_TOP_CLUB_TRACK:tr:2026-10-13");
+  expect(draftKey({ templateKey: "YT_VIEWS_24H", entity: "@warehousejobz", windowKey: "2026-10-13" })).toBe("YT_VIEWS_24H:@warehousejobz:2026-10-13");
+  expect(draftKey({ templateKey: "YT_VIEW_VELOCITY", entity: "@warehousejobz", windowKey: "2026-10-13" })).toBe("YT_VIEW_VELOCITY:@warehousejobz:2026-10-13");
+  expect(draftKey({ templateKey: "YT_LIKES_24H", entity: "@warehousejobz", windowKey: "2026-10-13" })).toBe("YT_LIKES_24H:@warehousejobz:2026-10-13");
+  expect(draftKey({ templateKey: "YT_ENGAGEMENT_RATE", entity: "@warehousejobz", windowKey: "2026-10-13" })).toBe("YT_ENGAGEMENT_RATE:@warehousejobz:2026-10-13");
+  expect(draftKey({ templateKey: "YT_CREATOR_VIEWS", entity: "@warehousejobz", windowKey: "2026-10-13" })).toBe("YT_CREATOR_VIEWS:@warehousejobz:2026-10-13");
 });
 test("proposal due only after resolve time and while open", () => {
   expect(dueForProposal({ status: "open", resolve_time: 100 }, 99)).toBe(false);

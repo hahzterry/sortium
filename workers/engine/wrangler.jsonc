@@ -4,11 +4,11 @@
   "compatibility_date": "2026-10-01",
   "compatibility_flags": ["nodejs_compat"],
   "triggers": { "crons": ["* * * * *"] },
-  "d1_databases": [{ "binding": "my_cwf_db", "database_name": "my-cwf-db", "database_id": "5cd955fe-f61e-4371-be0c-3d8f1340076f" }],
+  "d1_databases": [{ "binding": "DB", "database_name": "my-cwf-db", "database_id": "5cd955fe-f61e-4371-be0c-3d8f1340076f" }],
   "vars": {
     "APP_ORIGIN": "https://sortium-taupe.vercel.app",
     "PUBLIC_URL": "https://cwf-engine.summer-water-d053.workers.dev",
-    "YT_CREATORS": "UCf8TEOFEkzaVhaMbnP-MCmw,UCLGtMihrj0m7um7Yqr5qFCA,UCCrC-k_KGeMImaPWaoJp-TA,UC2JqVFypC6M5MB-2ueqV-qQ,UCfIasH6slctyH65bwAXSVFA,UCrIsZhoA1FwXTRRPbgMcVeQ,UCgIdIMOumxgRj_7XRiloJ7A,UCj-GyBX1G5rn4DgpiHMEZtw,UCXtwzNI6QsX2g7sV6nSF0-Q,UCDut_nD2ymAR-3r4EZOdnbA,UC_BAsm7FcBHwtr3JFQdSlaA"
+    "YT_CREATORS": "UCGiN2747aFEulmCkn7jjW4A"
   },
   "observability": { "enabled": true }
 }
