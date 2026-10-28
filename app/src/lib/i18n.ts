@@ -17,7 +17,7 @@ function detect(): Lang {
 let current: Lang = typeof window === "undefined" ? "en" : detect();
 const subs = new Set<() => void>();
 
-export function setLang(l: Lang) {
+export function setLang(_l: Lang) {
   current = "en";
   try {
     localStorage.setItem(KEY, "en");
@@ -505,7 +505,7 @@ export function trClock(hhmm: string): string {
 }
 
 /** "on Oct 13 at 12:00 UTC" */
-export function decidedAt(t: number, l: Lang): string {
+export function decidedAt(t: number, _l: Lang): string {
   const d = new Date(t * 1000);
   const hhmm = d.toISOString().slice(11, 16);
   return `on ${d.toLocaleString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })} at ${hhmm} UTC`;
