@@ -1,5 +1,4 @@
 import { resolveYtTop } from "../resolve/ytTop";
-import { chartQuestion, nextResolve } from "./amTop";
 import type { Env, MarketDraft, Template } from "../types";
 
 const REGIONS = ["TR", "US", "KR", "BR", "IN", "JP", "DE", "GB"] as const;
@@ -14,6 +13,20 @@ async function fetchChart(region: string, key: string, n: number): Promise<Chart
   return (await res.json()) as Chart;
 }
 
+// --- Local replacements for the deleted amTop.ts functions ---
+
+function nextResolve(now: number): number {
+  const d = new Date(now * 1000);
+  d.setUTCHours(24, 0, 0, 0); // Resolve at the next midnight UTC
+  return Math.floor(d.getTime() / 1000);
+}
+
+function chartQuestion(item: string, name: string, region: string, resolveTime: number, _demo: boolean): string {
+  const date = new Date(resolveTime * 1000).toISOString().slice(0, 10);
+  return `Which ${item} will top ${name} in ${region.toUpperCase()} on ${date}?`;
+}
+
+// -----------------------------------------------------------
 
 export const ytTop: Template = {
   key: "YT_TOP_VIEW_VELOCITY",
