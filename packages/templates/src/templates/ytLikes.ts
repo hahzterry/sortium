@@ -5,13 +5,13 @@ export const ytLikes: Template = {
   version: 1,
   demo: false,
   resolveFile: "resolve/ytLikes.ts",
-  plannedKeys: (env: Env) => [],
+  plannedKeys: (_env: Env) => [],
   rules: "Predict the number of likes on a new video after 24 hours.",
-  async drafts(env: Env): Promise<MarketDraft[]> {
+  async drafts(_env: Env): Promise<MarketDraft[]> {
     return [];
   },
-  // Added (meta, env) to match the expected signature
-      async snapshot(meta: Record<string, unknown>, env: Env): Promise<any> {
+  // Added underscores to unused arguments to pass strict TypeScript builds
+  async snapshot(_meta: Record<string, unknown>, _env: Env): Promise<any> {
     return {}; 
   },
   // Return 0 (index of "Other" or the default outcome) instead of a string

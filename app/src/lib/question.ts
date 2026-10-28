@@ -1,37 +1,33 @@
-import { chartQuestion, countryName } from "@cwf/templates";
-import { TR_COUNTRY, decidedAt, trClock, type Lang } from "./i18n";
+import { decidedAt, trClock } from "./i18n";
 
 type Q = { templateKey: string; question: string; resolveTime: number; demo: boolean; meta: Record<string, unknown> };
 
 /**
- * The question as people should read it. Chart markets are rebuilt from their data, so markets opened before the
- * copy fix read the same as new ones; the demo flag is shown as a badge, not as a "[demo]" prefix.
- * `short` drops the date for headlines whose date already sits right above them.
+ * The question as people should read it.
+ * Chart markets (like YouTube View Velocity) are rebuilt from their data.
+ * The demo flag is shown as a badge, not as a "[demo]" prefix.
  */
-export function displayQuestion(m: Q, opts: { short?: boolean; lang?: Lang } = {}): string {
-  const chart = m.templateKey.startsWith("AM_TOP") ? { item: "song", name: "Apple Music", cc: m.meta.cc }
-    : m.templateKey === "YT_TOP_VIEW_VELOCITY" ? { item: "video", name: "YouTube", cc: m.meta.region } : null;
-  if (chart && typeof chart.cc === "string") {
-    if (opts.lang === "tr") {
-      const cc = chart.cc.toLowerCase();
-      const where = TR_COUNTRY[cc]?.[1] ?? `${cc.toUpperCase()} bölgesinde`;
-      const top = chart.name === "YouTube" ? "YouTube'un" : "Apple Music'in";
-      const core = `${where} ${top} zirvesinde hangi ${chart.item === "song" ? "şarkı" : "video"} olacak?`;
-      if (opts.short) return core;
-      const when = m.demo ? `Saat ${trClock(new Date(m.resolveTime * 1000).toISOString().slice(11, 16))} (UTC)` : decidedAt(m.resolveTime, "tr");
-      return `${when} ${core}`;
+export function displayQuestion(m: Q, opts: { short?: boolean } = {}): string {
+  // Handle the YouTube Top View Velocity market specifically
+  if (m.templateKey === "YT_TOP_VIEW_VELOCITY" && typeof m.meta.region === "string") {
+    const region = (m.meta.region as string).toUpperCase();
+    
+    if (opts.short) {
+      return `Which video will top YouTube in ${region}?`;
     }
-    if (opts.short) return `Which ${chart.item} will top ${chart.name} in ${countryName(chart.cc)}?`;
-    return chartQuestion(chart.item, chart.name, chart.cc, m.resolveTime, m.demo).replace(/^\[demo\] /, "");
+    
+    const when = m.demo 
+      ? `at ${trClock(new Date(m.resolveTime * 1000).toISOString().slice(11, 16))}`
+      : decidedAt(m.resolveTime, "en");
+      
+    return `Which video will top YouTube in ${region} ${when}?`;
   }
-  const views = opts.lang === "tr" && m.question.match(/^How many views will "(.*)" by (.*) have 24h after publishing\?$/);
-  if (views) return `"${views[1]}" (${views[2]}) yayından 24 saat sonra kaç izlenmede olacak?`;
+
+  // Default fallback: just use the question from the backend, stripping any [demo] tag
   return m.question.replace(/^\[demo\] /, "");
 }
 
 /** Outcome labels the templates write in English ("Under 1.2M", "Other") in the reader's language. */
-export function displayOutcome(label: string, lang: Lang = "en"): string {
-  if (lang !== "tr") return label;
-  const under = label.match(/^Under (.+)$/);
-  return under ? `${under[1]} altı` : label;
+export function displayOutcome(label: string, _lang?: string): string {
+  return label;
 }
