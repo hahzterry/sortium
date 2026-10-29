@@ -55,7 +55,7 @@ const en = {
   nav: { today: "Home", browse: "Markets", me: "My picks", leaders: "Leaderboard" },
   home: {
     title: "Predict the next big YouTube Shorts.",
-    sub: "Will a @WarehouseJobz video reach 1 million views in 24 hours? Can it gain 250,000 views in six hours? Predict YouTube performance with test dollars. Verified results determine who shares the pool.",
+    sub: "Play the YouTube prediction game. Will a video go viral with 1M views or 250K in 6 hours? Use your test dollars to bet on 24-hour views, velocity, likes, engagement, and creator growth. The stats decide who wins the pool.",
     start: "Start with 1,000 test dollars",
     browse: "See all markets",
     stats: { volume: "In pools", bets: "Picks made", players: "Players", open: "Open markets" },
@@ -143,7 +143,7 @@ const en = {
     logout: "Disconnect",
   },
   lang: { label: "Language", other: "EN" },
-  family: { music: "Warehouse Jobs", youtube: "YouTube KPIs" },
+  family: { music: "Warehouse Jobs", youtube: "YouTube Predictions" },
   engineDown: "Can't reach the market engine right now. Retrying every 30 seconds.",
   loadingMarkets: "Loading markets",
   today: {
@@ -366,7 +366,7 @@ const tr: Dict = {
     logout: "Disconnect",
   },
   lang: { label: "Language", other: "EN" },
-  family: { music: "Warehouse Jobs", youtube: "YouTube KPIs" },
+  family: { music: "Warehouse Jobs", youtube: "YouTube Predictions" },
   engineDown: "Can't reach the market engine right now. Retrying every 30 seconds.",
   loadingMarkets: "Loading markets",
   today: {
@@ -530,4 +530,16 @@ export function errorText(e: unknown, l: Lang): string {
   // viem puts the decoded revert reason on the lines after its first one; keep them together
   const err = e as { shortMessage?: string; message?: string };
   return String(err.shortMessage ?? err.message ?? e).split(/\r?\n/).map((s) => s.trim()).filter(Boolean).slice(0, 2).join(" ").slice(0, 160);
+}
+
+/** Display the KPI measured by a market instead of a generic YouTube label. */
+export function marketKpiLabel(templateKey: string): string {
+  const labels: Record<string, string> = {
+    YT_VIEWS_24H: "24-Hour Video Views",
+    YT_VIEW_VELOCITY: "6-Hour View Velocity",
+    YT_LIKES_24H: "24-Hour Video Likes",
+    YT_ENGAGEMENT_RATE: "Like-to-View Engagement",
+    YT_CREATOR_VIEWS: "Creator Channel Views",
+  };
+  return labels[templateKey] ?? "YouTube Predictions";
 }
