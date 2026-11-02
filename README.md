@@ -1,22 +1,20 @@
 <div align="center">
 
-# Sortium
+# Shortshi
 
-**Pick what the internet does next.**
+**Pick what the YouTube Short does next.**
 
-Pool-betting prediction markets on public internet charts: which song tops Apple Music in a country tomorrow, which video tops YouTube trending, how many views a creator's new video gets in 24 hours. Markets open themselves from templates, and open code reads the official source to decide them. The result goes to UMA's Optimistic Oracle on Arbitrum, where anyone can dispute it.
+Pool-betting prediction markets on YouTube shorts: Which video tops YouTube trending, how many views a creator's new video gets in 24 hours. Markets open themselves from templates, and open code reads the official source to decide them. The result goes to UMA's Optimistic Oracle on Arbitrum, where anyone can dispute it.
 
-[**Live app**](https://sortium.sortium.deno.net) · [Engine API](https://cwf-engine.l3ekirerdem.workers.dev/api/markets) · [Contracts on Arbiscan](https://sepolia.arbiscan.io/address/0x950863296D8d229ee7B847E20B7960E8C7f6C41a) · English / Türkçe
+[**Live app**](https://shortshi.com) · [Contracts on Arbiscan](https://sepolia.arbiscan.io/address/0x950863296D8d229ee7B847E20B7960E8C7f6C41a) · English / Türkçe
 
 ![Sortium home page](docs/screenshots/home.jpg)
 
 </div>
 
-> Built for the **Colosseum Crypto World's Fair**, Arbitrum track. **Testnet only.** Every market is played with tUSD, a test token with no value.
-
 ## Why
 
-People already put real money on chart positions and view counts: markets on the top Spotify artist or a MrBeast video's views trade millions on centralized venues. Most of the long tail sits empty there, though, because order books need someone on the other side of every outcome. Sortium turns these questions into pool bets:
+People already put real money on chart positions and view counts: markets on the top YouTube shorts or a MrBeast video's views trade millions on centralized venues. Most of the shorts sits empty there, though, because order books need someone on the other side of every outcome. Shortshi turns these questions into pool bets:
 - **No counterparty needed.** Everyone pays into one pool and whoever is right splits it, so twenty players are enough.
 - **No hand-written markets.** Templates open them every day for every country.
 - **No admin deciding results.** The source is read by open code, and the outcome passes through UMA's dispute window.
@@ -47,14 +45,15 @@ Market #11 on the live deployment went through every step, and `bun run verify 1
 
 | Template | Question | Source | Cadence |
 |---|---|---|---|
-| `AM_TOP_COUNTRY` | Which song will top Apple Music in {country}? | Apple Most Played feed | Daily, 10 countries |
-| `YT_TOP_COUNTRY` | Which video will top YouTube trending in {region}? | YouTube Data API v3 | Daily, 8 regions |
-| `YT_VIEWS_24H` | How many views will {creator}'s new video have after 24h? | YouTube Data API v3 | On each upload by 5 tracked creators |
-| `AM_TOP_DEMO` | The Apple Music question on a short clock (labelled demo) | Apple Most Played feed | Every 15 minutes |
+| `YT_VIEWS_24H` | How many views will {creator}'s new video have after 24h? | YouTube Data API v3 | On each upload by tracked creators |
+| `YT_VIEW_VELOCITY` | How quickly will {creator}'s new video accumulate views in its first 24h? | YouTube Data API v3 | On each upload by tracked creators |
+| `YT_LIKES_24H` | How many likes will {creator}'s new video have after 24h? | YouTube Data API v3 | On each upload by tracked creators |
+| `YT_ENGAGEMENT_RATE` | What will {creator}'s new video's engagement rate (likes/views) be after 24h? | YouTube Data API v3 | On each upload by tracked creators |
+| `YT_CREATOR_VIEWS` | How many total views will {creator}'s channel reach over a rolling window? | YouTube Data API v3 | High-frequency polling for fast-moving creators |
 
 ## Try it
 
-1. Open [sortium.sortium.deno.net](https://sortium.sortium.deno.net).
+1. Open [shortshi.com](https://shortshi.com).
 2. Click **Start with 1,000 test dollars**, then **Instant wallet**. A test wallet opens in the browser and the faucet funds it, with nothing to install. MetaMask, Rabby and OKX Wallet work too; Phantom doesn't support Arbitrum Sepolia.
 3. Pick a market, tap an outcome, choose an amount and bet.
 
@@ -100,11 +99,5 @@ cd packages/templates && bun test           # 17 tests
 cd workers/engine && bun test               # 13 tests
 cd app && bun test src/lib && bun run dev   # 19 tests, local app against the live engine
 ```
-
-## Hackathon notes
-
-- **Prior work:** none. Everything here was written during the hackathon.
-- **Third-party:** UMA Optimistic Oracle V3, OpenZeppelin, viem, forge-std, GSAP, Apple's Most Played feed, YouTube Data API.
-- **Test data:** part of the early activity on the live deployment comes from ten team test wallets. They are not users.
 
 [MIT License](LICENSE)
