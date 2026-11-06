@@ -6,7 +6,7 @@
   "triggers": { "crons": ["* * * * *"] },
   "d1_databases": [{ "binding": "DB", "database_name": "my-cwf-db", "database_id": "5cd955fe-f61e-4371-be0c-3d8f1340076f" }],
   "vars": {
-    "APP_ORIGIN": "https://sortium-taupe.vercel.app",
+    "APP_ORIGIN": "https://shortshi.com",
     "PUBLIC_URL": "https://cwf-engine.summer-water-d053.workers.dev",
     "YT_CREATORS": "UCGiN2747aFEulmCkn7jjW4A"
   },
